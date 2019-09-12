@@ -19,24 +19,22 @@ namespace FI.AtividadeEntrevista.DAL
         /// <param name="cliente">Objeto de cliente</param>
         internal long Incluir(DML.Cliente cliente)
         {
-            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
-            
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Nome", cliente.Nome));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Sobrenome", cliente.Sobrenome));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Nacionalidade", cliente.Nacionalidade));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("CEP", cliente.CEP));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Estado", cliente.Estado));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Cidade", cliente.Cidade));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Logradouro", cliente.Logradouro));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Email", cliente.Email));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Telefone", cliente.Telefone));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", cliente.CPF));
-
-            DataSet ds = base.Consultar("FI_SP_IncClienteV2", parametros);
-            long ret = 0;
-            if (ds.Tables[0].Rows.Count > 0)
-                long.TryParse(ds.Tables[0].Rows[0][0].ToString(), out ret);
-            return ret;
+            using (var repository = new Repositories.ClientRepository())
+            {
+                return repository.AddClient(new Model.CLIENTES
+                {
+                    NOME = cliente.Nome,
+                    SOBRENOME = cliente.Sobrenome,
+                    NACIONALIDADE = cliente.Nacionalidade,
+                    CEP = cliente.CEP,
+                    ESTADO = cliente.Estado,
+                    CIDADE = cliente.Cidade,
+                    LOGRADOURO = cliente.Logradouro,
+                    EMAIL = cliente.Email,
+                    TELEFONE = cliente.Telefone,
+                    CPF = cliente.CPF
+                });
+            }
         }
 
         /// <summary>
@@ -45,14 +43,23 @@ namespace FI.AtividadeEntrevista.DAL
         /// <param name="cliente">Objeto de cliente</param>
         internal DML.Cliente Consultar(long Id)
         {
-            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
-
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Id", Id));
-
-            DataSet ds = base.Consultar("FI_SP_ConsCliente", parametros);
-            List<DML.Cliente> cli = Converter(ds);
-
-            return cli.FirstOrDefault();
+            using (var rp = new Repositories.ClientRepository())
+            {
+                var cliente = rp.GetById(Id);
+                return new Cliente
+                {
+                    Nome = cliente.NOME,
+                    Sobrenome = cliente.SOBRENOME,
+                    Nacionalidade = cliente.NACIONALIDADE,
+                    CEP = cliente.CEP,
+                    Estado = cliente.ESTADO,
+                    Cidade = cliente.CIDADE,
+                    Logradouro = cliente.LOGRADOURO,
+                    Email = cliente.EMAIL,
+                    Telefone = cliente.TELEFONE,
+                    CPF = cliente.CPF
+                };
+            }
         }
 
         internal bool VerificarExistencia(string CPF)

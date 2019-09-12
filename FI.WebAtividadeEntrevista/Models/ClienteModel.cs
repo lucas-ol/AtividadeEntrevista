@@ -76,6 +76,8 @@ namespace WebAtividadeEntrevista.Models
         [CPF(ErrorMessage ="CPF Invalido")]
         public string CPF { get; set; }
 
+        [Required]
+        public IEnumerable<BeneficiariosModel> Beneficiarios { get; set; }
 
     }    
 }

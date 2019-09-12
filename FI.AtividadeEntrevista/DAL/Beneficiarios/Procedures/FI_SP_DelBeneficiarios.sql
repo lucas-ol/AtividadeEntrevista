@@ -1,0 +1,6 @@
+﻿CREATE PROC FI_SP_AltCliente   
+	@idCliente           BIGINT
+AS
+BEGIN
+	DELETE FROM BENEFICIARIOS WHERE IDCLIENTE = @idCliente;
+END

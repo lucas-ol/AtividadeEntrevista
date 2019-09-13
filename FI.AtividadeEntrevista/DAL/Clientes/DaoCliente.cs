@@ -64,13 +64,10 @@ namespace FI.AtividadeEntrevista.DAL
 
         internal bool VerificarExistencia(string CPF)
         {
-            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
-
-            parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", CPF));
-
-            DataSet ds = base.Consultar("FI_SP_VerificaCliente", parametros);
-
-            return ds.Tables[0].Rows.Count > 0;
+            using (var repository = new Repositories.ClientRepository())
+            {
+                return repository.CheckCPF(CPF);
+            }
         }
 
         internal List<Cliente> Pesquisa(int iniciarEm, int quantidade, string campoOrdenacao, bool crescente, out int qtd)

@@ -26,7 +26,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Incluir(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-            
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -38,15 +38,14 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else if (bo.VerificarExistencia(model.CPF))
             {
-               
+
                 Response.StatusCode = 400;
                 return Json(string.Concat(Environment.NewLine, "CPF Ja Cadastrado"));
             }
             else
             {
-                
                 model.Id = bo.Incluir(new Cliente()
-                {                    
+                {
                     CEP = model.CEP,
                     Cidade = model.Cidade,
                     Email = model.Email,
@@ -59,7 +58,13 @@ namespace WebAtividadeEntrevista.Controllers
                     CPF = model.CPF
                 });
 
-           
+                var feed = boBeneficiario.Incluir(model.Beneficiarios.Select(item => new Beneficiario
+                {
+                    Nome = item.Nome,
+                    CPF = item.CPF,
+                    ClientId = model.Id
+                }));
+
                 return Json("Cadastro efetuado com sucesso");
             }
         }
@@ -68,7 +73,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Alterar(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-       
+   BoBeneficiario boBeneficiario = new BoBeneficiario();
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -94,7 +99,16 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone,
                     CPF = model.CPF
                 });
-                               
+
+             
+
+                boBeneficiario.Alterar(model.Beneficiarios.Select(item => new Beneficiario
+                {
+                    Nome = item.Nome,
+                    CPF = item.CPF,
+                    ClientId = model.Id
+                }));
+
                 return Json("Cadastro alterado com sucesso");
             }
         }
@@ -103,6 +117,8 @@ namespace WebAtividadeEntrevista.Controllers
         public ActionResult Alterar(long id)
         {
             BoCliente bo = new BoCliente();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
+
             Cliente cliente = bo.Consultar(id);
             Models.ClienteModel model = null;
 
@@ -123,7 +139,12 @@ namespace WebAtividadeEntrevista.Controllers
                     CPF = cliente.CPF
                 };
 
-            
+                boBeneficiario.(model.Beneficiarios.Select(item => new Beneficiario
+                {
+                    Nome = item.Nome,
+                    CPF = item.CPF,
+                    ClientId = model.Id
+                }));
             }
 
             return View(model);

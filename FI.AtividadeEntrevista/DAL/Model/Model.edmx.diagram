@@ -7,6 +7,7 @@
       <Diagram DiagramId="6a77a6a1cf824fc69aa418a40da312c4" Name="Diagram1">
         <EntityTypeShape EntityType="BancoDeDadosModel.BENEFICIARIOS" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BancoDeDadosModel.CLIENTES" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="BancoDeDadosModel.FK__BENEFICIA__IDCLI__0697FACD" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

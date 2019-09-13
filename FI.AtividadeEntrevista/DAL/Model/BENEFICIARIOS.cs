@@ -18,5 +18,7 @@ namespace FI.AtividadeEntrevista.DAL.Model
         public string CPF { get; set; }
         public string NOME { get; set; }
         public long IDCLIENTE { get; set; }
+    
+        public virtual CLIENTES CLIENTES { get; set; }
     }
 }

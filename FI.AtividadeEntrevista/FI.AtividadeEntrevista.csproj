@@ -83,6 +83,7 @@
     <Compile Include="DAL\Model\FI_SP_ConsCliente_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAL\Model\Interfaces\IBeneficiarioRepository.cs" />
     <Compile Include="DAL\Model\Interfaces\IClienteRepository.cs" />
     <Compile Include="DAL\Model\Interfaces\IRepositoryBase.cs" />
     <Compile Include="DAL\Model\Model.Context.cs">
@@ -101,12 +102,14 @@
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="DAL\Padrao\FI.AcessoDados.cs" />
+    <Compile Include="DAL\Repositories\BeneficiarioRepository.cs" />
     <Compile Include="DAL\Repositories\ClientRepository.cs" />
     <Compile Include="DAL\Repositories\RepositoryBase.cs" />
     <Compile Include="DML\Beneficiario.cs" />
     <Compile Include="DML\Cliente.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\CPF.cs" />
+    <Compile Include="Util\FeedBack.cs" />
     <Compile Include="Util\Text.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +135,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DAL\Beneficiarios\Procedures\AlterTable.sql" />
     <Content Include="DAL\Model\Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Model.Context.cs</LastGenOutput>

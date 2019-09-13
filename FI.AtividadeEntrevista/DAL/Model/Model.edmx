@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BancoDeDadosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BancoDeDadosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BENEFICIARIOS">
           <Key>
             <PropertyRef Name="ID" />
@@ -30,6 +30,18 @@
           <Property Name="TELEFONE" Type="varchar" MaxLength="15" />
           <Property Name="CPF" Type="varchar" MaxLength="15" />
         </EntityType>
+        <Association Name="FK__BENEFICIA__IDCLI__0697FACD">
+          <End Role="CLIENTES" Type="Self.CLIENTES" Multiplicity="1" />
+          <End Role="BENEFICIARIOS" Type="Self.BENEFICIARIOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BENEFICIARIOS">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="FI_SP_AltBenef" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NOME" Type="varchar" Mode="In" />
           <Parameter Name="CPF" Type="varchar" Mode="In" />
@@ -51,7 +63,8 @@
         <Function Name="FI_SP_ConsCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="bigint" Mode="In" />
         </Function>
-        <Function Name="FI_SP_IncClienteV" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="FI_SP_IncCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CPF" Type="varchar" Mode="In" />
           <Parameter Name="NOME" Type="varchar" Mode="In" />
           <Parameter Name="SOBRENOME" Type="varchar" Mode="In" />
           <Parameter Name="NACIONALIDADE" Type="varchar" Mode="In" />
@@ -60,8 +73,6 @@
           <Parameter Name="CIDADE" Type="varchar" Mode="In" />
           <Parameter Name="LOGRADOURO" Type="varchar" Mode="In" />
           <Parameter Name="EMAIL" Type="varchar" Mode="In" />
-          <Parameter Name="TELEFONE" Type="varchar" Mode="In" />
-          <Parameter Name="CPF" Type="varchar" Mode="In" />
         </Function>
         <Function Name="FI_SP_IncClienteV2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NOME" Type="varchar" Mode="In" />
@@ -87,9 +98,12 @@
         <EntityContainer Name="BancoDeDadosModelStoreContainer">
           <EntitySet Name="BENEFICIARIOS" EntityType="Self.BENEFICIARIOS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CLIENTES" EntityType="Self.CLIENTES" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__BENEFICIA__IDCLI__0697FACD" Association="Self.FK__BENEFICIA__IDCLI__0697FACD">
+            <End Role="CLIENTES" EntitySet="CLIENTES" />
+            <End Role="BENEFICIARIOS" EntitySet="BENEFICIARIOS" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BancoDeDadosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -101,6 +115,7 @@
           <Property Name="CPF" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="NOME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IDCLIENTE" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="CLIENTES" Relationship="BancoDeDadosModel.FK__BENEFICIA__IDCLI__0697FACD" FromRole="BENEFICIARIOS" ToRole="CLIENTES" />
         </EntityType>
         <EntityType Name="CLIENTES">
           <Key>
@@ -117,6 +132,7 @@
           <Property Name="EMAIL" Type="String" MaxLength="2079" FixedLength="false" Unicode="false" />
           <Property Name="TELEFONE" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="CPF" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BENEFICIARIOS" Relationship="BancoDeDadosModel.FK__BENEFICIA__IDCLI__0697FACD" FromRole="CLIENTES" ToRole="BENEFICIARIOS" />
         </EntityType>
         <EntityContainer Name="BancoDeDadosEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="BENEFICIARIOS" EntityType="Self.BENEFICIARIOS" />
@@ -140,7 +156,7 @@
             <Parameter Name="Id" Mode="In" Type="Int64" />
           </FunctionImport>
           <FunctionImport Name="FI_SP_ConsCliente" ReturnType="Collection(BancoDeDadosModel.FI_SP_ConsCliente_Result)">
-            <Parameter Name="ID" Mode="In" Type="Int64" />
+          <Parameter Name="ID" Mode="In" Type="Int64" />
           </FunctionImport>
           <FunctionImport Name="FI_SP_IncClienteV" ReturnType="Collection(Decimal)">
             <Parameter Name="NOME" Mode="In" Type="String" />
@@ -173,7 +189,22 @@
             <Parameter Name="crescente" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="FI_SP_VerificaCliente" ReturnType="Collection(Int32)">
+          <Parameter Name="CPF" Mode="In" Type="String" />
+          </FunctionImport>
+          <AssociationSet Name="FK__BENEFICIA__IDCLI__0697FACD" Association="BancoDeDadosModel.FK__BENEFICIA__IDCLI__0697FACD">
+            <End Role="CLIENTES" EntitySet="CLIENTES" />
+            <End Role="BENEFICIARIOS" EntitySet="BENEFICIARIOS" />
+          </AssociationSet>
+          <FunctionImport Name="FI_SP_IncCliente">
             <Parameter Name="CPF" Mode="In" Type="String" />
+            <Parameter Name="NOME" Mode="In" Type="String" />
+            <Parameter Name="SOBRENOME" Mode="In" Type="String" />
+            <Parameter Name="NACIONALIDADE" Mode="In" Type="String" />
+            <Parameter Name="CEP" Mode="In" Type="String" />
+            <Parameter Name="ESTADO" Mode="In" Type="String" />
+            <Parameter Name="CIDADE" Mode="In" Type="String" />
+            <Parameter Name="LOGRADOURO" Mode="In" Type="String" />
+            <Parameter Name="EMAIL" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="FI_SP_ConsCliente_Result">
@@ -189,6 +220,18 @@
           <Property Type="Int64" Name="ID" Nullable="false" />
           <Property Type="String" Name="CPF" Nullable="true" MaxLength="15" />
         </ComplexType>
+        <Association Name="FK__BENEFICIA__IDCLI__0697FACD">
+          <End Type="BancoDeDadosModel.CLIENTES" Role="CLIENTES" Multiplicity="1" />
+          <End Type="BancoDeDadosModel.BENEFICIARIOS" Role="BENEFICIARIOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BENEFICIARIOS">
+              <PropertyRef Name="IDCLIENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -241,10 +284,10 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="FI_SP_IncClienteV" FunctionName="BancoDeDadosModel.Store.FI_SP_IncClienteV" />
           <FunctionImportMapping FunctionImportName="FI_SP_IncClienteV2" FunctionName="BancoDeDadosModel.Store.FI_SP_IncClienteV2" />
           <FunctionImportMapping FunctionImportName="FI_SP_PesqCliente" FunctionName="BancoDeDadosModel.Store.FI_SP_PesqCliente" />
           <FunctionImportMapping FunctionImportName="FI_SP_VerificaCliente" FunctionName="BancoDeDadosModel.Store.FI_SP_VerificaCliente" />
+          <FunctionImportMapping FunctionImportName="FI_SP_IncCliente" FunctionName="BancoDeDadosModel.Store.FI_SP_IncCliente" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

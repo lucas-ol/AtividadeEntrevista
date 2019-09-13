@@ -224,5 +224,46 @@ namespace FI.AtividadeEntrevista.DAL.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("FI_SP_VerificaCliente", cPFParameter);
         }
+    
+        public virtual int FI_SP_IncCliente(string cPF, string nOME, string sOBRENOME, string nACIONALIDADE, string cEP, string eSTADO, string cIDADE, string lOGRADOURO, string eMAIL)
+        {
+            var cPFParameter = cPF != null ?
+                new ObjectParameter("CPF", cPF) :
+                new ObjectParameter("CPF", typeof(string));
+    
+            var nOMEParameter = nOME != null ?
+                new ObjectParameter("NOME", nOME) :
+                new ObjectParameter("NOME", typeof(string));
+    
+            var sOBRENOMEParameter = sOBRENOME != null ?
+                new ObjectParameter("SOBRENOME", sOBRENOME) :
+                new ObjectParameter("SOBRENOME", typeof(string));
+    
+            var nACIONALIDADEParameter = nACIONALIDADE != null ?
+                new ObjectParameter("NACIONALIDADE", nACIONALIDADE) :
+                new ObjectParameter("NACIONALIDADE", typeof(string));
+    
+            var cEPParameter = cEP != null ?
+                new ObjectParameter("CEP", cEP) :
+                new ObjectParameter("CEP", typeof(string));
+    
+            var eSTADOParameter = eSTADO != null ?
+                new ObjectParameter("ESTADO", eSTADO) :
+                new ObjectParameter("ESTADO", typeof(string));
+    
+            var cIDADEParameter = cIDADE != null ?
+                new ObjectParameter("CIDADE", cIDADE) :
+                new ObjectParameter("CIDADE", typeof(string));
+    
+            var lOGRADOUROParameter = lOGRADOURO != null ?
+                new ObjectParameter("LOGRADOURO", lOGRADOURO) :
+                new ObjectParameter("LOGRADOURO", typeof(string));
+    
+            var eMAILParameter = eMAIL != null ?
+                new ObjectParameter("EMAIL", eMAIL) :
+                new ObjectParameter("EMAIL", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FI_SP_IncCliente", cPFParameter, nOMEParameter, sOBRENOMEParameter, nACIONALIDADEParameter, cEPParameter, eSTADOParameter, cIDADEParameter, lOGRADOUROParameter, eMAILParameter);
+        }
     }
 }

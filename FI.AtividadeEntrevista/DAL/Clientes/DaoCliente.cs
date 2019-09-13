@@ -48,6 +48,7 @@ namespace FI.AtividadeEntrevista.DAL
                 var cliente = rp.GetById(Id);
                 return new Cliente
                 {
+                    Id = cliente.ID,
                     Nome = cliente.NOME,
                     Sobrenome = cliente.SOBRENOME,
                     Nacionalidade = cliente.NACIONALIDADE,
@@ -70,26 +71,29 @@ namespace FI.AtividadeEntrevista.DAL
             }
         }
 
-        internal List<Cliente> Pesquisa(int iniciarEm, int quantidade, string campoOrdenacao, bool crescente, out int qtd)
+        internal List<Cliente> Pesquisa(int pagina, int quantidade, string campoOrdenacao, bool crescente, out int qtd)
         {
-            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
+            using (var repository = new Repositories.ClientRepository())
+            {
+                var result = repository.Search(pagina, quantidade, campoOrdenacao, crescente, out qtd).Select(c => new DML.Cliente
+                {
+                    Id = c.ID,
+                    Nome = c.NOME,
+                    Sobrenome = c.SOBRENOME,
+                    Nacionalidade = c.NACIONALIDADE,
+                    CEP = c.CEP,
+                    Estado = c.ESTADO,
+                    Cidade = c.CIDADE,
+                    Logradouro = c.LOGRADOURO,
+                    Email = c.EMAIL,
+                    Telefone = c.TELEFONE,
+                    CPF = c.CPF
 
-            parametros.Add(new System.Data.SqlClient.SqlParameter("iniciarEm", iniciarEm));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("quantidade", quantidade));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("campoOrdenacao", campoOrdenacao));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("crescente", crescente));
+                });
 
-            DataSet ds = base.Consultar("FI_SP_PesqCliente", parametros);
-            List<DML.Cliente> cli = Converter(ds);
+                return result.ToList();
 
-            int iQtd = 0;
-
-            if (ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
-                int.TryParse(ds.Tables[1].Rows[0][0].ToString(), out iQtd);
-
-            qtd = iQtd;
-
-            return cli;
+            }
         }
 
         /// <summary>
@@ -111,22 +115,24 @@ namespace FI.AtividadeEntrevista.DAL
         /// Inclui um novo cliente
         /// </summary>
         /// <param name="cliente">Objeto de cliente</param>
-        internal void Alterar(DML.Cliente cliente)
+        internal void Alterar(DML.Cliente c)
         {
-            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
-
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Nome", cliente.Nome));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Sobrenome", cliente.Sobrenome));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Nacionalidade", cliente.Nacionalidade));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("CEP", cliente.CEP));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Estado", cliente.Estado));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Cidade", cliente.Cidade));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Logradouro", cliente.Logradouro));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Email", cliente.Email));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Telefone", cliente.Telefone));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("ID", cliente.Id));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", cliente.CPF));
-            base.Executar("FI_SP_AltCliente", parametros);
+            using (var repository = new Repositories.ClientRepository())
+            {
+                repository.Update(new Model.CLIENTES {
+                    ID = c.Id,
+                    NOME = c.Nome,
+                    SOBRENOME = c.Sobrenome,
+                    NACIONALIDADE  = c.Nacionalidade,
+                    CEP = c.CEP,
+                    ESTADO = c.Estado,
+                    CIDADE = c.Cidade,
+                    LOGRADOURO= c.Logradouro,
+                    EMAIL= c.Email,
+                    TELEFONE= c.Telefone,
+                    CPF = c.CPF
+                });
+            }
         }
 
 
@@ -136,11 +142,10 @@ namespace FI.AtividadeEntrevista.DAL
         /// <param name="cliente">Objeto de cliente</param>
         internal void Excluir(long Id)
         {
-            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
-
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Id", Id));
-
-            base.Executar("FI_SP_DelCliente", parametros);
+            using (var repository = new Repositories.ClientRepository())
+            {
+                repository.Remove(repository.GetById(Id));
+            }
         }
 
         private List<DML.Cliente> Converter(DataSet ds)

@@ -14,6 +14,12 @@ namespace FI.AtividadeEntrevista.DAL.Model
     
     public partial class CLIENTES
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CLIENTES()
+        {
+            this.BENEFICIARIOS = new HashSet<BENEFICIARIOS>();
+        }
+    
         public long ID { get; set; }
         public string NOME { get; set; }
         public string SOBRENOME { get; set; }
@@ -25,5 +31,8 @@ namespace FI.AtividadeEntrevista.DAL.Model
         public string EMAIL { get; set; }
         public string TELEFONE { get; set; }
         public string CPF { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BENEFICIARIOS> BENEFICIARIOS { get; set; }
     }
 }

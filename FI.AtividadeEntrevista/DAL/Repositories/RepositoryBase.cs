@@ -9,7 +9,7 @@ namespace FI.AtividadeEntrevista.DAL.Repositories
 {
     public abstract class RepositoryBase<TEntity> : IDisposable, IRepositoryBase<TEntity> where TEntity : class
     {
-        public virtual void Add(TEntity obj)
+        public void Add(TEntity obj)
         {
             using (var ctx = new Model.BancoDeDadosEntities())
             {
@@ -18,18 +18,20 @@ namespace FI.AtividadeEntrevista.DAL.Repositories
             }
         }
 
+        public int AddRange(IEnumerable<TEntity> objs)
+        {
+            using (var ctx = new Model.BancoDeDadosEntities())
+            {
+                ctx.Set<TEntity>().AddRange(objs);
+                return ctx.SaveChanges();
+            }
+        }
+
         public void Dispose()
         {
             GC.SuppressFinalize(this);
         }
 
-        public IEnumerable<TEntity> GetAll(int QTDE)
-        {
-            using (var ctx = new Model.BancoDeDadosEntities())
-            {
-                return ctx.Set<TEntity>().Take(QTDE).ToList();
-            }
-        }
         public IEnumerable<TEntity> GetAll()
         {
             var ctx = new Model.BancoDeDadosEntities();

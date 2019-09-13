@@ -33,12 +33,14 @@ namespace FI.AtividadeEntrevista.DAL.Repositories
             }
         }
 
-        public IEnumerable<Model.CLIENTES> Search(int pagina, int quantidade, string orderBy, bool crescente , out int qtd, string query = "")
+        public IEnumerable<Model.CLIENTES> Search(int pagina, int quantidade, string orderBy, bool crescente , out int qtde, string query = "")
         {
             using (var ctx = new Model.BancoDeDadosEntities())
             {
-                var search = ctx.CLIENTES.Where(x => x.NOME.Contains(query) || x.EMAIL.Contains(query))
-                    .Skip(quantidade * (pagina - 1)).Take(quantidade);
+                var search = ctx.CLIENTES.Where(x => x.NOME.Contains(query) || x.EMAIL.Contains(query));                    
+                qtde = search.Count();
+
+                search.Skip(quantidade * (pagina - 1)).Take(quantidade);
 
                 if (orderBy == "EMAIL")
                 {
@@ -54,6 +56,7 @@ namespace FI.AtividadeEntrevista.DAL.Repositories
                     else
                         search.OrderByDescending(x => x.NOME);
                 }
+                
                 return search.ToList();
             }
 

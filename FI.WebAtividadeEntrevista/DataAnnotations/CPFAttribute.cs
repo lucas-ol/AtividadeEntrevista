@@ -17,6 +17,11 @@ namespace FI.AtividadeEntrevista.DataAnnotations
             bool valido = Util.CPF.Validar(value.ToString());
             return valido;
         }
+
+        public override string FormatErrorMessage(string name)
+        {
+            return base.FormatErrorMessage(name);
+        }
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
         {
             yield return new ModelClientValidationRule

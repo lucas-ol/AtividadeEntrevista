@@ -1,17 +1,17 @@
-﻿using System;
+﻿using FI.AtividadeEntrevista.DML;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FI.AtividadeEntrevista.DML;
 
 namespace FI.AtividadeEntrevista.DAL
 {
     /// <summary>
     /// Classe de acesso a dados de Cliente
     /// </summary>
-    internal class DaoCliente : AcessoDados
+    internal class DaoCliente
     {
         /// <summary>
         /// Inclui um novo cliente
@@ -46,20 +46,31 @@ namespace FI.AtividadeEntrevista.DAL
             using (var rp = new Repositories.ClientRepository())
             {
                 var cliente = rp.GetById(Id);
-                return new Cliente
+                if (cliente != null)
                 {
-                    Id = cliente.ID,
-                    Nome = cliente.NOME,
-                    Sobrenome = cliente.SOBRENOME,
-                    Nacionalidade = cliente.NACIONALIDADE,
-                    CEP = cliente.CEP,
-                    Estado = cliente.ESTADO,
-                    Cidade = cliente.CIDADE,
-                    Logradouro = cliente.LOGRADOURO,
-                    Email = cliente.EMAIL,
-                    Telefone = cliente.TELEFONE,
-                    CPF = cliente.CPF
-                };
+                    return new Cliente
+                    {
+                        Id = cliente.ID,
+                        Nome = cliente.NOME,
+                        Sobrenome = cliente.SOBRENOME,
+                        Nacionalidade = cliente.NACIONALIDADE,
+                        CEP = cliente.CEP,
+                        Estado = cliente.ESTADO,
+                        Cidade = cliente.CIDADE,
+                        Logradouro = cliente.LOGRADOURO,
+                        Email = cliente.EMAIL,
+                        Telefone = cliente.TELEFONE,
+                        CPF = cliente.CPF,
+                        Beneficiarios = cliente.BENEFICIARIOS.Select(x => new Beneficiario
+                        {
+                            Nome = x.NOME,
+                            CPF = x.CPF,
+                            Id = x.ID,
+                            ClientId = x.IDCLIENTE
+                        }).ToList()
+                    };
+                }
+                return null;
             }
         }
 
@@ -87,12 +98,16 @@ namespace FI.AtividadeEntrevista.DAL
                     Logradouro = c.LOGRADOURO,
                     Email = c.EMAIL,
                     Telefone = c.TELEFONE,
-                    CPF = c.CPF
-
+                    CPF = c.CPF,
+                    Beneficiarios = c.BENEFICIARIOS.Select(x => new Beneficiario
+                    {
+                        ClientId = x.IDCLIENTE,
+                        Nome = x.NOME,
+                        CPF = x.CPF
+                    }).ToList()
                 });
 
                 return result.ToList();
-
             }
         }
 
@@ -101,14 +116,29 @@ namespace FI.AtividadeEntrevista.DAL
         /// </summary>
         internal List<DML.Cliente> Listar()
         {
-            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
-
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Id", 0));
-
-            DataSet ds = base.Consultar("FI_SP_ConsCliente", parametros);
-            List<DML.Cliente> cli = Converter(ds);
-
-            return cli;
+            using (var rep = new Repositories.ClientRepository())
+            {
+                return rep.GetAll().Select(c => new Cliente
+                {
+                    Id = c.ID,
+                    Nome = c.NOME,
+                    Sobrenome = c.SOBRENOME,
+                    Nacionalidade = c.NACIONALIDADE,
+                    CEP = c.CEP,
+                    Estado = c.ESTADO,
+                    Cidade = c.CIDADE,
+                    Logradouro = c.LOGRADOURO,
+                    Email = c.EMAIL,
+                    Telefone = c.TELEFONE,
+                    CPF = c.CPF,
+                    Beneficiarios = c.BENEFICIARIOS.Select(x => new Beneficiario
+                    {
+                        ClientId = x.IDCLIENTE,
+                        Nome = x.NOME,
+                        CPF = x.CPF
+                    }).ToList()
+                }).ToList();
+            }
         }
 
         /// <summary>
@@ -119,17 +149,18 @@ namespace FI.AtividadeEntrevista.DAL
         {
             using (var repository = new Repositories.ClientRepository())
             {
-                repository.Update(new Model.CLIENTES {
+                repository.Update(new Model.CLIENTES
+                {
                     ID = c.Id,
                     NOME = c.Nome,
                     SOBRENOME = c.Sobrenome,
-                    NACIONALIDADE  = c.Nacionalidade,
+                    NACIONALIDADE = c.Nacionalidade,
                     CEP = c.CEP,
                     ESTADO = c.Estado,
                     CIDADE = c.Cidade,
-                    LOGRADOURO= c.Logradouro,
-                    EMAIL= c.Email,
-                    TELEFONE= c.Telefone,
+                    LOGRADOURO = c.Logradouro,
+                    EMAIL = c.Email,
+                    TELEFONE = c.Telefone,
                     CPF = c.CPF
                 });
             }

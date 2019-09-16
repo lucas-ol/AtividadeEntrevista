@@ -5,8 +5,10 @@ $(document).ready(function () {
         $.ajax({
             url: urlPost,
             method: "POST",
-            data: {
-                "NOME": $(this).find("#Nome").val(),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                "Nome": $(this).find("#Nome").val(),
                 "CEP": $(this).find("#CEP").val(),
                 "Email": $(this).find("#Email").val(),
                 "Sobrenome": $(this).find("#Sobrenome").val(),
@@ -15,8 +17,9 @@ $(document).ready(function () {
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
-                "CPF": $(this).find("#CPF").val()
-            },
+                "CPF": $(this).find("#CPF").val(),
+                "Beneficiarios": JSON.parse($(this).find("#hdnBeneficiarios").val())
+            }),
             error:
                 function (r) {
                     if (r.status == 400)
@@ -31,7 +34,6 @@ $(document).ready(function () {
                 }
         });
     });
-    $('#CPF').mask('000.000.000-00');
 })
 
 function ModalDialog(titulo, texto) {

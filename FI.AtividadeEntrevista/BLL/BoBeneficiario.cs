@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FI.AtividadeEntrevista.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,21 +16,24 @@ namespace FI.AtividadeEntrevista.BLL
                 var itens = new List<DAL.Model.BENEFICIARIOS>();
                 var feed = new Util.FeedBack();
                 var ucRepedidos = new List<string>();
+                
                 foreach (var item in beneficiarios)
                 {
-                    if (itens.Any(x => x.CPF != item.CPF))
+                    if (itens.Any(x => x.CPF != item.CPF) || itens.Count == 0)
                     {
                         itens.Add(new DAL.Model.BENEFICIARIOS
                         {
                             NOME = item.Nome,
                             CPF = item.CPF,
                             IDCLIENTE = item.ClientId
-                        });
+                        //       ID = 
+                    });
                     }
                     else
                         ucRepedidos.Add(item.CPF);
 
                 }
+               
                 int inseridos = repository.AddRange(itens);
                 feed.HasErros = inseridos <= 0;
                 if (feed.HasErros)
@@ -62,9 +66,17 @@ namespace FI.AtividadeEntrevista.BLL
             }
         }
 
-        public DML.Beneficiario ListarBenerios(string useId) {
-
-            
+        public List<DML.Beneficiario> ListarBenerios(long useId)
+        {
+            using (var repository = new DAL.Repositories.BeneficiarioRepository())
+            {
+                return repository.GetByUser(useId).Select(x => new DML.Beneficiario
+                {
+                    Nome = x.NOME,
+                    CPF = x.CPF,
+                    ClientId = x.IDCLIENTE
+                }).ToList();
+            }
         }
 
         public void Dispose()

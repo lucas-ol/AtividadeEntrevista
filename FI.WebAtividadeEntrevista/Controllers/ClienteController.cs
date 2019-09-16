@@ -1,11 +1,11 @@
 ﻿using FI.AtividadeEntrevista.BLL;
-using WebAtividadeEntrevista.Models;
+using FI.AtividadeEntrevista.DML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using FI.AtividadeEntrevista.DML;
+using WebAtividadeEntrevista.Models;
 
 namespace WebAtividadeEntrevista.Controllers
 {
@@ -34,7 +34,7 @@ namespace WebAtividadeEntrevista.Controllers
                                       select error.ErrorMessage).ToList();
 
                 Response.StatusCode = 400;
-                return Json(string.Join(Environment.NewLine, erros));
+                return Json(string.Join("<br/>", erros));
             }
             else if (bo.VerificarExistencia(model.CPF))
             {
@@ -63,7 +63,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = item.Nome,
                     CPF = item.CPF,
                     ClientId = model.Id
-                }));
+                }).ToList());
 
                 return Json("Cadastro efetuado com sucesso");
             }
@@ -73,7 +73,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Alterar(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-   BoBeneficiario boBeneficiario = new BoBeneficiario();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -100,7 +100,7 @@ namespace WebAtividadeEntrevista.Controllers
                     CPF = model.CPF
                 });
 
-             
+
 
                 boBeneficiario.Alterar(model.Beneficiarios.Select(item => new Beneficiario
                 {
@@ -136,15 +136,14 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
                     Telefone = cliente.Telefone,
-                    CPF = cliente.CPF
+                    CPF = cliente.CPF,
+                    Beneficiarios = cliente.Beneficiarios.Select(item => new BeneficiariosModel
+                    {
+                        Nome = item.Nome,
+                        CPF = item.CPF
+                    }).ToList()
                 };
 
-                boBeneficiario.(model.Beneficiarios.Select(item => new Beneficiario
-                {
-                    Nome = item.Nome,
-                    CPF = item.CPF,
-                    ClientId = model.Id
-                }));
             }
 
             return View(model);

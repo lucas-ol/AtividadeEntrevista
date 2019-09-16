@@ -5,9 +5,10 @@
 @section scripts{
     <script>
         var urlPost = '@Url.Action("Incluir", "Cliente", new { area = "" })';
+        var obj = null;
     </script>
 
-    @Scripts.Render("~/bundles/jquery.mask")
+   
     @Scripts.Render("~/bundles/clientes")
     @Scripts.Render("~/bundles/beneficiarios")
 }

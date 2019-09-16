@@ -1,8 +1,11 @@
 ﻿
 
+$(function () {
+    AtualizarListagem();
+});
 
+var Beneficiarios = obj ? obj.Beneficiarios : [];
 
-var Beneficiarios = [];
 
 function Adicionar() {
     var json = {
@@ -38,18 +41,17 @@ function Alterar(cpf, nome) {
 
 function AtualizarListagem() {
     var items = "";
+    $('#hdnBeneficiarios').val(JSON.stringify(Beneficiarios));
     for (item of Beneficiarios) {
         items +=
             '<tr>' +
-            '<td>' + item.CPF + '<td/>' +
-            '<td>' + item.Nome + '<td/>' +
+            '<td>' + item.CPF + '</td>' +
+            '<td>' + item.Nome + '</td>' +
             '<td>' +
-            '<button type="button" class="btn btn-primary" onclick="Alterar("' + item.CPF + '","' + item.Nome + '"); ">Alterar</button>' +
-            '<td/>' +
-            '<td>' +
-            '<button type="button" class="btn btn-primary" onclick="Remover("' + item.CPF + '");" >Excluir</button>' +
-            '<td/>' +
-            '<tr/>';
+            '<button type="button" class="btn btn-primary" style="margin-right:10px"  onclick="Alterar(\'' + item.CPF.trim() + '\',\'' + item.Nome + '\');">Alterar</button>' +            
+            '<button type="button" class="btn btn-primary" onclick="Remover(\'' + item.CPF + '\');" >Excluir</button>' +
+            '</td>' +
+            '</tr>';
     }
     $('#tbBeneficiarios').html(items);
 };

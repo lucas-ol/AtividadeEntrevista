@@ -16,7 +16,7 @@ namespace WebAtividadeEntrevista
             bundles.Add(new ScriptBundle("~/bundles/jquery.mask").Include(
                       "~/Scripts/jquery.mask.js"));
 
-         
+
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
@@ -30,6 +30,9 @@ namespace WebAtividadeEntrevista
             bundles.Add(new ScriptBundle("~/bundles/jtable").Include(
                       "~/Scripts/jtable/jquery.jtable.min.js",
                       "~/Scripts/jtable/localization/jquery.jtable.pt-BR.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/main").Include(
+                "~/Scripts/main.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/clientes").Include(
                       "~/Scripts/Clientes/FI.Clientes.js"));
@@ -49,7 +52,7 @@ namespace WebAtividadeEntrevista
             bundles.Add(new StyleBundle("~/Content/jtable").Include(
                       "~/Scripts/jtable/themes/metro/darkgray/jtable.css"));
 
-          
+
 
         }
     }

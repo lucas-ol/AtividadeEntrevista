@@ -11,7 +11,7 @@ namespace WebAtividadeEntrevista.Models
     {
         [Required]
         [MaxLength(15)]
-        [CPF(ErrorMessage = "CPF do Beneficiário Invalido")]
+        [CPF]
         public string CPF { get; set; }
 
         [Required(ErrorMessage = "Nome do Beneficiário requerido ")]

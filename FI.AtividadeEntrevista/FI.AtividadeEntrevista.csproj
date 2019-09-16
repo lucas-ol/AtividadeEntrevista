@@ -73,7 +73,6 @@
     <Compile Include="BLL\BoBeneficiario.cs" />
     <Compile Include="BLL\BoCliente.cs" />
     <Compile Include="DAL\Clientes\DaoCliente.cs" />
-    <Compile Include="DAL\Beneficiarios\DaoBeneficiario.cs" />
     <Compile Include="DAL\Model\BENEFICIARIOS.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

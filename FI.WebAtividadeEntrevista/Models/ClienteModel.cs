@@ -73,7 +73,7 @@ namespace WebAtividadeEntrevista.Models
         /// </summary>
         [Required]
         [MaxLength(15)]
-        [CPF(ErrorMessage ="CPF Invalido")]
+        [CPF(ErrorMessage ="CPF {0} Invalido")]
         public string CPF { get; set; }
 
         [Required(ErrorMessage = "Adicione um beneficiarios")]

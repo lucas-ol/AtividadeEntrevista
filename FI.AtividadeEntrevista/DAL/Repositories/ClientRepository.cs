@@ -17,7 +17,7 @@ namespace FI.AtividadeEntrevista.DAL.Repositories
             {
                 var result = ctx.FI_SP_IncClienteV2(obj.NOME, obj.SOBRENOME, obj.NACIONALIDADE, obj.CEP, obj.ESTADO, obj.CIDADE, obj.LOGRADOURO, obj.EMAIL, obj.TELEFONE, obj.CPF).FirstOrDefault();
 
-                return Convert.ToInt64(result ?? default);
+                return Convert.ToInt64(result ?? 0);
             }
         }
         /// <summary>
@@ -33,32 +33,32 @@ namespace FI.AtividadeEntrevista.DAL.Repositories
             }
         }
 
-        public IEnumerable<Model.CLIENTES> Search(int pagina, int quantidade, string orderBy, bool crescente , out int qtde, string query = "")
+        public IEnumerable<Model.CLIENTES> Search(int pagina, int quantidade, string orderBy, bool crescente, out int qtde, string query = "")
         {
-            using (var ctx = new Model.BancoDeDadosEntities())
+            var ctx = new Model.BancoDeDadosEntities();
+
+            var search = ctx.CLIENTES.Where(x => x.NOME.Contains(query) || x.EMAIL.Contains(query));
+            qtde = search.Count();
+
+            search.Skip(quantidade * (pagina - 1)).Take(quantidade);
+
+            if (orderBy == "EMAIL")
             {
-                var search = ctx.CLIENTES.Where(x => x.NOME.Contains(query) || x.EMAIL.Contains(query));                    
-                qtde = search.Count();
-
-                search.Skip(quantidade * (pagina - 1)).Take(quantidade);
-
-                if (orderBy == "EMAIL")
-                {
-                    if (crescente)
-                        search.OrderBy(x => x.EMAIL) ;
-                    else
-                        search.OrderByDescending(x => x.EMAIL);
-                }
+                if (crescente)
+                    search.OrderBy(x => x.EMAIL);
                 else
-                {
-                    if (crescente)
-                        search.OrderBy(x => x.NOME);
-                    else
-                        search.OrderByDescending(x => x.NOME);
-                }
-                
-                return search.ToList();
+                    search.OrderByDescending(x => x.EMAIL);
             }
+            else
+            {
+                if (crescente)
+                    search.OrderBy(x => x.NOME);
+                else
+                    search.OrderByDescending(x => x.NOME);
+            }
+
+            return search.ToList();
+
 
         }
 

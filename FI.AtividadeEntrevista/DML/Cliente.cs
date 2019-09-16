@@ -15,7 +15,7 @@ namespace FI.AtividadeEntrevista.DML
         /// Id
         /// </summary>
         public long Id { get; set; }
-        
+
         /// <summary>
         /// CEP
         /// </summary>
@@ -65,5 +65,6 @@ namespace FI.AtividadeEntrevista.DML
         /// CPF
         /// </summary>
         public string CPF { get; set; }
-    }    
+        public IEnumerable<Beneficiario> Beneficiarios { get; set; }
+    }
 }

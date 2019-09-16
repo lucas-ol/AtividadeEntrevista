@@ -18,7 +18,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="Sobrenome">CPF:</label>
-                <input required="required" type="text" class="form-control" id="CPF" name="CPF" placeholder="Ex.: 999.999.999-99" maxlength="15">
+                <input required="required" type="text" class="form-control js-cpf" id="CPF" name="CPF" placeholder="Ex.: 999.999.999-99" maxlength="15">
             </div>
         </div>
         <div class="col-md-6">
@@ -33,23 +33,49 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label for="CEP">CEP:</label>
-                <input required="required" type="text" class="form-control" id="CEP" name="CEP" placeholder="Ex.: 01011-100" maxlength="9">
+                <input required="required" type="text" class="form-control js-cep" id="CEP" name="CEP" placeholder="Ex.: 01011-100" maxlength="9">
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
                 <label for="Estado">Estado:</label>
-                <select required="required" id="Estado" class="form-control" name="Estado">
+                <select required="required" id="Estado" class="form-control js-estado" name="Estado">
                     <option value="">Selecione</option>
-                    <option value="SP">São Paulo</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
                     <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                    <option value="EX">Estrangeiro</option>
                 </select>
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
                 <label for="Cidade">Cidade:</label>
-                <input required="required" type="text" class="form-control" id="Cidade" name="Cidade" maxlength="50" placeholder="Ex.: São Paulo">
+                <input required="required" type="text" class="form-control js-cidade" id="Cidade" name="Cidade" maxlength="50" placeholder="Ex.: São Paulo">
             </div>
         </div>
     </div>
@@ -58,7 +84,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label for="Logradouro">Logradouro:</label>
-                <input required="required" type="text" class="form-control" id="Logradouro" name="Logradouro" placeholder="Ex.: Rua Boa Vista 253" maxlength="500">
+                <input required="required" type="text" class="form-control js-logradouro" id="Logradouro" name="Logradouro" placeholder="Ex.: Rua Boa Vista 253" maxlength="500">
             </div>
         </div>
     </div>
@@ -77,7 +103,8 @@
             </div>
         </div>
     </div>
-    <input type="button" class="btn btn-default" name="Beneficiários" value="Beneficiários" id="btnModalBeneficiarios" data-target="#modalBeneficiarios" data-toggle="modal" />
+    <input type="hidden" name="Beneficiarios" value="" id="hdnBeneficiarios" />
+    <input type="button" class="btn btn-default" name="btnBeneficiários" value="Beneficiários" id="btnModalBeneficiarios" data-target="#modalBeneficiarios" data-toggle="modal" />
     <div class="row">
         <div class="col-lg-12">
             <div class="pull-right">
@@ -99,7 +126,7 @@
                         <div class="col-sm-5">
                             <div class="form-group">
                                 <label for="bnfCPF">CPF:</label>
-                                <input type="text" class="form-control" id="bnfCPF" name="CPFBeneficiario"  maxlength="15">
+                                <input type="text" class="form-control js-cpf" id="bnfCPF" name="CPFBeneficiario" maxlength="15">
                             </div>
                         </div>
                         <div class="col-sm-5">
@@ -108,7 +135,7 @@
                                 <input type="text" class="form-control" id="bnfNome" name="NomeBeneficiario" placeholder="Ex.: João" />
                             </div>
                         </div>
-                        <div class="col-sm-2">    
+                        <div class="col-sm-2">
                             <label class="col-lg-12">&nbsp;</label>
                             <button type="button" class="btn btn-sm btn-success" onclick="Adicionar()">Incluir</button>
                         </div>
@@ -124,6 +151,9 @@
                                         <th>
                                             Nome
                                         </th>
+                                        <th>
+
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbBeneficiarios">
@@ -137,5 +167,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </form>
+
+
